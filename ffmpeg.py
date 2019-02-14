@@ -3,7 +3,12 @@ import asyncio
 from pathlib import Path
 from typing import Generator
 import shutil
+import sys
 from argparse import ArgumentParser
+
+if sys.version_info < (3, 7):
+    raise RuntimeError('Python >= 3.7 required')
+
 
 FFPLAY = shutil.which('ffplay')
 if not FFPLAY:
