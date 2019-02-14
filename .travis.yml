@@ -1,0 +1,15 @@
+language: python
+group: travis_latest
+dist: xenial
+
+git:
+  depth: 3
+  quiet: true
+
+python:
+- 3.8-dev
+- 3.7
+
+script:
+- flake8
+- mypy .
