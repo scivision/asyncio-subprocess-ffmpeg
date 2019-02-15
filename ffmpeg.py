@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 import asyncio
 from pathlib import Path
-from typing import Generator
 import shutil
 import sys
 from argparse import ArgumentParser
@@ -24,10 +23,6 @@ async def ffplay(filein: Path):
     await proc.wait()
 
 
-async def main(flist: Generator[Path, None, None]):
-    await asyncio.gather(*[ffplay(f) for f in flist])
-
-
 if __name__ == '__main__':
     p = ArgumentParser(
         description="Plays media files asynchronously with FFplay")
@@ -42,4 +37,6 @@ if __name__ == '__main__':
 
     flist = (f for f in path.iterdir() if f.is_file() and f.suffix in P.suffix)
 
-    asyncio.run(main(flist))
+    futures = [ffplay(f) for f in flist]
+
+    asyncio.run(asyncio.wait(futures))
