@@ -18,9 +18,12 @@ async def ffplay(filein: Path):
     """ Play media asynchronously """
     assert isinstance(FFPLAY, str)
 
-    proc = await asyncio.create_subprocess_exec(FFPLAY, str(filein))
+    proc = await asyncio.create_subprocess_exec(*[FFPLAY, '-v', 'warning', str(filein)])
 
-    await proc.wait()
+    ret = await proc.wait()
+
+    if ret != 0:
+        print(filein, 'playback failure', file=sys.stderr)
 
 
 if __name__ == '__main__':
