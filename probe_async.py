@@ -1,8 +1,21 @@
 #!/usr/bin/env python
 from argparse import ArgumentParser
 from pathlib import Path
+from typing import List
 import asyncio
 import asyncioffmpeg.ffprobe as probe
+
+
+async def main(path: Path, suffix: List[str]):
+
+    flist = (f for f in path.iterdir() if f.is_file() and f.suffix in suffix)
+
+    futures = [probe.main(f) for f in flist]
+
+    flist, duration = await asyncio.gather(*futures)
+    for f, dur in zip(flist, duration):
+        print(f.name, dur)
+
 
 if __name__ == '__main__':
     p = ArgumentParser(
@@ -16,8 +29,4 @@ if __name__ == '__main__':
     if not path.is_dir():
         raise FileNotFoundError(f'{path} is not a directory')
 
-    flist = (f for f in path.iterdir() if f.is_file() and f.suffix in P.suffix)
-
-    futures = [probe.main(f) for f in flist]
-
-    asyncio.run(asyncio.wait(futures))
+    asyncio.run(main(path, P.suffix))

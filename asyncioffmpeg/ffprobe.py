@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 import asyncio
 import json
+from typing import Optional, Tuple
 from pathlib import Path
 import shutil
 import sys
@@ -31,10 +32,11 @@ async def ffprobe(filein: Path):
     return json.loads(stdout.decode('utf8'))
 
 
-async def main(filein: Path) -> float:
+async def main(filein: Path) -> Tuple[Path, Optional[float]]:
     try:
         meta = await asyncio.wait_for(ffprobe(filein), timeout=0.5)
         duration = float(meta['streams'][0]['duration'])
-        return duration
+        return filein, duration
     except asyncio.TimeoutError:
         print('timeout ', filein, file=sys.stderr)
+        return None
