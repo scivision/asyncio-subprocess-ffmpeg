@@ -31,10 +31,10 @@ async def ffprobe(filein: Path):
     return json.loads(stdout.decode('utf8'))
 
 
-async def main(filein: Path):
+async def main(filein: Path) -> float:
     try:
         meta = await asyncio.wait_for(ffprobe(filein), timeout=0.5)
         duration = float(meta['streams'][0]['duration'])
-        print(f"{filein.name:>40}  {duration:>5.1f}")
+        return duration
     except asyncio.TimeoutError:
         print('timeout ', filein, file=sys.stderr)
