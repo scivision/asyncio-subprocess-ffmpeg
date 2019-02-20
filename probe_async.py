@@ -10,11 +10,14 @@ async def main(path: Path, suffix: List[str]):
 
     flist = (f for f in path.iterdir() if f.is_file() and f.suffix in suffix)
 
-    futures = [probe.main(f) for f in flist]
+    futures = [probe.get_meta(f) for f in flist]
 
-    flist, duration = await asyncio.gather(*futures)
-    for f, dur in zip(flist, duration):
-        print(f.name, dur)
+    metas = await asyncio.gather(*futures)
+
+    for meta in metas:
+        fn = meta['format']['filename']
+        dur = float(meta['streams'][0]['duration'])
+        print(f"{fn:>40}  {dur:>5.1f}")
 
 
 if __name__ == '__main__':

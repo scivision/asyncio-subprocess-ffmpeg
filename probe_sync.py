@@ -1,32 +1,12 @@
 #!/usr/bin/env python
-import json
 from pathlib import Path
 import shutil
-import sys
 from argparse import ArgumentParser
-import subprocess
-
-if sys.version_info < (3, 7):
-    raise RuntimeError('Python >= 3.7 required')
-
+import asyncioffmpeg.ffprobe as probe
 
 FFPROBE = shutil.which('ffprobe')
 if not FFPROBE:
     raise FileNotFoundError('FFPROBE not found')
-
-
-def ffprobe(filein: Path):
-    """ get media metadata """
-    assert isinstance(FFPROBE, str)
-
-    stdout = subprocess.check_output([FFPROBE, '-v', 'warning',
-                                      '-print_format', 'json',
-                                      '-show_streams',
-                                      '-show_format', str(filein)],
-                                     text=True,
-                                     timeout=1.)
-
-    return json.loads(stdout)
 
 
 if __name__ == '__main__':
@@ -44,6 +24,6 @@ if __name__ == '__main__':
     flist = (f for f in path.iterdir() if f.is_file() and f.suffix in P.suffix)
 
     for f in flist:
-        meta = ffprobe(f)
+        meta = probe.ffprobe_sync(f)
         duration = float(meta['streams'][0]['duration'])
         print(f"{f.name:>40}  {duration:>5.1f}")
