@@ -2,7 +2,7 @@
 import asyncio
 from pathlib import Path
 from argparse import ArgumentParser
-import asyncioffmpeg as af
+import asyncioffmpeg.ffplay as play
 
 if __name__ == '__main__':
     p = ArgumentParser(
@@ -18,4 +18,4 @@ if __name__ == '__main__':
 
     flist = (f for f in path.iterdir() if f.is_file() and f.suffix in P.suffix)
 
-    asyncio.run(af.ffplay.main(flist))
+    asyncio.run(play.main(flist))
