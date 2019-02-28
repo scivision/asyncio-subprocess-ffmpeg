@@ -13,7 +13,7 @@ program concurrent
 ! usage:
 ! Give it a list of videos, most conveniently by globbing on the command line like:
 !
-! cafrun -np 3 pool ~/Videos/*.avi
+! cafrun -np 3 playvid ~/Videos/*.avi
 !
 ! that will play 3 videos simultaneously, until all videos are complete
 
@@ -52,7 +52,7 @@ endif
 !> Ensure workers wait to be assigned their tasks
 sync all
 
-!> execute process pool with finite number of workers
+!> execute concurrently with finite number of workers
 do i = 1,Nwork
   fname = trim(fwork(i))
   if (len(fname) == N) exit  ! was not auto-allocated, due to unevenly divisible tasks/workers

@@ -16,3 +16,19 @@ I like to test asynchronous techniques with video playback, as it makes some eff
 
 * `play_threadpool`: Even though coroutines are more efficient, the syntax of `concurrent.futures.ThreadPoolExecutor` is perhaps the simplest possible way to spawn independent processes in a controlled fashion
 * `play_coroutine`: Use Python `asyncio` coroutine event loop to spawn processes.
+
+### Fortran
+
+* `play_coarray.f90`: example of using Fortran with processes and coarrays.
+
+Build by
+```sh
+cd build
+meson ..
+ninja
+```
+
+run like
+```sh
+cafrun -np 3 playvid ~/Videos/*
+```
