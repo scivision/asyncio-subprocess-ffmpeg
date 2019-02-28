@@ -6,7 +6,9 @@ implicit none
 integer, parameter :: N = 1024
 character(N), allocatable :: flist(:)
 integer :: argc, i, ierr, istat
-character(N) :: argv, fname, errmsg
+character(N) :: argv, errmsg
+character(:), allocatable :: fname
+character(*), parameter :: cmd='ffplay -v warning -autoexit '
 
 if(this_image() == 1) then
   argc = command_argument_count()
@@ -26,9 +28,12 @@ endif
 call co_broadcast(flist, 1)
 
 do i = this_image(), argc, num_images()
-  fname = flist(i)
-  print '(I2,1X,A)', this_image(), trim(fname)
-  call execute_command_line('ffplay -v warning '//fname, wait=.true., exitstat=istat, cmdstat=ierr, cmdmsg=errmsg)
+  fname = trim(flist(i))
+  print '(I2,1X,A)', this_image(), fname
+
+  call execute_command_line(cmd//fname, wait=.true., &
+    exitstat=istat, cmdstat=ierr, cmdmsg=errmsg)
+
   if (ierr /= 0) write(stderr,*) 'Return code', istat, errmsg, 'on image', this_image(), fname
 enddo
 
