@@ -3,7 +3,7 @@ group: travis_latest
 dist: xenial
 
 git:
-  depth: 3
+  depth: 25
   quiet: true
 
 python:
@@ -19,5 +19,5 @@ install: pip install -e .
 
 script:
 - flake8
-- mypy . --ignore-missing-imports
+- mypy .
 - pytest -v
