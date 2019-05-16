@@ -53,6 +53,7 @@ async def coro(Nworker: int, Niter: int, tic: float):
 
 class Thread_worker(threading.Thread):
     """threading worker"""
+
     def __init__(self, i: int, Niter: int):
         super(Thread_worker, self).__init__()
         self.Niter = Niter

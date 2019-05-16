@@ -1,10 +1,16 @@
 #!/usr/bin/env python
-import asyncio
-import os
+"""
+example of using queue with non-asyncio subprocess
+This is NOT a good way to do things in general.
+"""
 from pathlib import Path
 from argparse import ArgumentParser
+import queue
+import threading
 
-import asyncioffmpeg.ffplay as play
+import asyncioffmpeg.ffplay_sync as play
+
+NTHREADS = 2
 
 
 if __name__ == '__main__':
@@ -19,8 +25,17 @@ if __name__ == '__main__':
 
     flist = (f for f in path.iterdir() if f.is_file() and f.suffix in P.suffix)
 
-    if os.name == 'nt':
-        loop = asyncio.ProactorEventLoop()
-        loop.run_until_complete(play.main(flist))
-    else:
-        asyncio.run(play.main(flist))
+    qin = queue.Queue()  # type: ignore
+    for fn in flist:
+        qin.put(fn)
+
+    threads = []
+    for i in range(NTHREADS):
+        t = threading.Thread(target=play.ffplay_sync, args=(qin,))
+        t.start()
+        threads.append(t)
+
+# In general one would use the following lines to block until the tasks are done.
+    qin.join()
+    for t in threads:
+        t.join()

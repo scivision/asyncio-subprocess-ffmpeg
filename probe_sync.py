@@ -2,7 +2,7 @@
 from pathlib import Path
 import shutil
 from argparse import ArgumentParser
-import asyncioffmpeg.ffprobe as probe
+import asyncioffmpeg.ffprobe_sync as probe
 
 FFPROBE = shutil.which('ffprobe')
 if not FFPROBE:

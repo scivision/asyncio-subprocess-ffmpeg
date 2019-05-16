@@ -11,12 +11,12 @@ import json
 from pathlib import Path
 import shutil
 import sys
-import subprocess
-
 
 FFPROBE = shutil.which('ffprobe')
 if not FFPROBE:
     raise FileNotFoundError('FFPROBE not found')
+
+TIMEOUT = 5.0  # 2.0 is too short for Windows
 
 
 # %% Asynchronous FFprobe
@@ -39,24 +39,8 @@ async def ffprobe(filein: Path) -> dict:
 
 async def get_meta(filein: Path) -> dict:
     try:
-        meta = await asyncio.wait_for(ffprobe(filein), timeout=0.5)
+        meta = await asyncio.wait_for(ffprobe(filein), timeout=TIMEOUT)
         return meta
     except asyncio.TimeoutError:
         print('timeout ', filein, file=sys.stderr)
         return {}
-
-# %% synchronous FFprobe
-
-
-def ffprobe_sync(filein: Path) -> dict:
-    """ get media metadata """
-    assert isinstance(FFPROBE, str)
-
-    meta = subprocess.check_output([FFPROBE, '-v', 'warning',
-                                    '-print_format', 'json',
-                                    '-show_streams',
-                                    '-show_format',
-                                    str(filein)],
-                                   text=True)
-
-    return json.loads(meta)

@@ -1,6 +1,8 @@
 #!/usr/bin/env python
+import os
 import pytest
 import asyncioffmpeg.ffprobe as probe
+import asyncioffmpeg.ffprobe_sync as probe_sync
 
 
 def get_duration(meta: dict) -> float:
@@ -8,6 +10,7 @@ def get_duration(meta: dict) -> float:
 
 
 @pytest.mark.asyncio
+@pytest.mark.skipif(os.name == 'nt', reason='Pytest-asyncio not setup for Windows yet')
 async def test_ffprobe(genpat):
     vid = genpat
 
@@ -18,7 +21,7 @@ async def test_ffprobe(genpat):
 def test_ffprobe_sync(genpat):
     vid = genpat
 
-    meta = probe.ffprobe_sync(vid)
+    meta = probe_sync.ffprobe_sync(vid)
     assert get_duration(meta) == pytest.approx(5.)
 
 
