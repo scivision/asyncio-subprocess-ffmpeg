@@ -35,7 +35,7 @@ if __name__ == '__main__':
     P = p.parse_args()
 
     if os.name == 'nt':
-        loop = asyncio.ProactorEventLoop()
+        loop = asyncio.ProactorEventLoop()  # type: ignore
         loop.run_until_complete(main(P.path, P.suffix))
     else:
         asyncio.run(main(P.path, P.suffix))

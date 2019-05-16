@@ -20,7 +20,7 @@ if __name__ == '__main__':
     flist = (f for f in path.iterdir() if f.is_file() and f.suffix in P.suffix)
 
     if os.name == 'nt':
-        loop = asyncio.ProactorEventLoop()
+        loop = asyncio.ProactorEventLoop()  # type: ignore
         loop.run_until_complete(play.main(flist))
     else:
         asyncio.run(play.main(flist))
