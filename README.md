@@ -1,4 +1,6 @@
 [![Build Status](https://travis-ci.com/ec500-software-engineering/asyncio-subprocess-ffmpeg.svg?branch=master)](https://travis-ci.com/ec500-software-engineering/asyncio-subprocess-ffmpeg)
+[![Build status](https://ci.appveyor.com/api/projects/status/lg480ord3kxsner2?svg=true)](https://ci.appveyor.com/project/scivision/asyncio-subprocess-ffmpeg)
+
 
 # asyncio FFmpeg
 
