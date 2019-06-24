@@ -2,7 +2,7 @@
 from pathlib import Path
 import shutil
 from argparse import ArgumentParser
-import asyncioffmpeg.ffprobe_sync as probe
+import asyncioffmpeg.ffprobe as probe
 
 FFPROBE = shutil.which('ffprobe')
 if not FFPROBE:
@@ -14,7 +14,7 @@ if __name__ == '__main__':
         description="Get media metadata synchronously with FFprobe")
     p.add_argument('path', help='directory where media files are kept')
     p.add_argument('-suffix', help='file suffixes of desired media file types',
-                   nargs='+', default=['.mp4', '.avi', '.ogv'])
+                   nargs='+', default=['.mp4', '.avi', '.ogv', '.ogg'])
     P = p.parse_args()
 
     path = Path(P.path).expanduser()

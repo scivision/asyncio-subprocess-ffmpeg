@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 import asyncio
 import os
+import sys
 from pathlib import Path
 from argparse import ArgumentParser
 
@@ -12,15 +13,16 @@ if __name__ == '__main__':
         description="Plays media files asynchronously with FFplay")
     p.add_argument('path', help='directory where media files are kept')
     p.add_argument('-suffix', help='file suffixes of desired media file types',
-                   nargs='+', default=['.mp4', '.avi', '.ogv', '.wmv', '.flv', '.mov'])
+                   nargs='+', default=['.mp4', '.avi', '.ogv', '.wmv', '.flv', '.mov', '.ogg'])
     P = p.parse_args()
 
     path = Path(P.path).expanduser()
+    if not path.is_dir():
+        raise NotADirectoryError(path)
 
     flist = (f for f in path.iterdir() if f.is_file() and f.suffix in P.suffix)
 
-    if os.name == 'nt':
-        loop = asyncio.ProactorEventLoop()  # type: ignore
-        loop.run_until_complete(play.main(flist))
-    else:
-        asyncio.run(play.main(flist))
+    if os.name == 'nt' and sys.version_info < (3, 8):
+        asyncio.set_event_loop_policy(asyncio.WindowsProactorEventLoopPolicy())  # type: ignore
+
+    asyncio.run(play.main(flist))

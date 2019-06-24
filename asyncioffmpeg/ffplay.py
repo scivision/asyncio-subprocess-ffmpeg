@@ -7,12 +7,8 @@ import asyncio
 from pathlib import Path
 import shutil
 import sys
-from typing import List, Generator, Union
+from typing import Iterable
 import os
-
-if sys.version_info < (3, 7):
-    raise RuntimeError('Python >= 3.7 required')
-
 
 FFPLAY = shutil.which('ffplay')
 if not FFPLAY:
@@ -28,9 +24,8 @@ async def ffplay(queue: asyncio.Queue):
 
     while True:
         filein = await queue.get()
-        assert isinstance(filein, Path)
 
-        cmd = [FFPLAY, '-v', 'warning', '-autoexit', str(filein)]
+        cmd = [FFPLAY, '-loglevel', 'warning', '-autoexit', str(filein)]
 
         proc = await asyncio.create_subprocess_exec(*cmd)
 
@@ -42,7 +37,7 @@ async def ffplay(queue: asyncio.Queue):
         queue.task_done()
 
 
-async def main(flist: Union[List[Path], Generator[Path, None, None]]):
+async def main(flist: Iterable[Path]):
 
     Ntask = os.cpu_count()  # includes logical cores
     if not isinstance(Ntask, int):

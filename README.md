@@ -9,15 +9,38 @@ In general to show the latest techniques, Python &ge; 3.7 is required.
 
 ## FFprobe
 
-* `probe_sync`: Use FFprobe to retrieve file metadata synchronously
-* `probe_coroutine`: Use FFprobe to retrieve file metadata asynchronously using Python `asyncio` coroutine event loop.
+Both synchronous (traditional for loop) and asynchronous pipeline are demonstrated.
+They call FFprobe executable to return JSON formatted metadata.
+
+### probe_sync.py
+
+retrieve file metadata synchronously.
+
+### probe_coroutine.py
+
+retrieve file metadata in an asynchronous pipeline (asyncio generator) using Python `asyncio` coroutine event loop.
 
 ## FFplay
 
 I like to test asynchronous techniques with video playback, as it makes some effects obvious.
+The FFplay asyncio example is more advanced than the FFprobe example.
+In the FFprobe example, the lazy asyncio generator produces metadata concurrently as fast as it's requested.
+There is no resource throttling in the FFprobe example, so the CPU could become overwhelmed with context switching.
 
-* `play_threadpool`: Even though coroutines are more efficient, the syntax of `concurrent.futures.ThreadPoolExecutor` is perhaps the simplest possible way to spawn independent processes in a controlled fashion
-* `play_coroutine`: Use Python `asyncio` coroutine event loop to spawn processes.
+The FFplay example in contrast is an example of a task using resource throttling via asyncio.Queue.
+The queueing could also be implemented for FFprobe style task if desired.
+However, the rationale employed is that the FFprobe task is overall lightweight, and thus other parts of the pipeline inherently limit resource utilization.
+If the FFprobe task was in an asyncio.gather() algorithm, resource utilization could get too high.
+Thus we have a "win-win" by using asyncio generator for FFprobe--the throttling comes implicitly from other parts of the pipeline.
+
+
+### play_threadpool.py
+
+Even though coroutines are more efficient in many applications, the syntax of `concurrent.futures.ThreadPoolExecutor` is perhaps the simplest possible way to spawn independent processes in a controlled fashion
+
+### play_coroutine.py
+
+Use Python `asyncio` coroutine event loop to spawn processes.
 
 ### Fortran
 
