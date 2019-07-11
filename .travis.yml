@@ -9,6 +9,8 @@ git:
 python:
 - 3.8-dev
 - 3.7
+- 3.6
+- 3.5
 
 addons:
   apt:
@@ -18,12 +20,17 @@ addons:
 matrix:
   include:
   - os: linux
+    name: PEP8 MyPy
     python: 3.7
-    install: pip install -e .[tests]
+    install: pip install -e .[tests,cov]
     script:
     - flake8
     - mypy .
+    - pytest -r a -v
+    after_success:
+    - pytest --cov
+    - coveralls
 
 install: pip install -e .[tests]
 
-script: pytest -v
+script: pytest -r a -v

@@ -33,9 +33,7 @@ import multiprocessing
 import asyncio
 import sys
 from argparse import ArgumentParser
-
-if sys.version_info < (3, 6):
-    raise RuntimeError('Python >= 3.6 required')
+from asyncioffmpeg.runner import runner
 
 
 async def coro_worker(i: int, Niter: int, tic: float):
@@ -43,11 +41,18 @@ async def coro_worker(i: int, Niter: int, tic: float):
     for _ in range(Niter):
         math.sin(3)
 
-    print(f'Coroutine worker {i} done at {time.time()-tic:.2f} sec.')
+    print("Coroutine worker {} done at {:.2f} sec.".format(i, time.monotonic() - tic))
 
 
 async def coro(Nworker: int, Niter: int, tic: float):
-    tasks = [asyncio.create_task(coro_worker(i, Niter, tic)) for i in range(Nworker)]
+    if sys.version_info >= (3, 7):
+        tasks = [
+            asyncio.create_task(coro_worker(i, Niter, tic)) for i in range(Nworker)
+        ]
+    else:
+        tasks = [
+            asyncio.ensure_future(coro_worker(i, Niter, tic)) for i in range(Nworker)
+        ]
     await asyncio.wait(tasks)
 
 
@@ -60,11 +65,15 @@ class Thread_worker(threading.Thread):
         self.i = i
 
     def run(self):
-        tic = time.time()
+        tic = time.monotonic()
         for _ in range(self.Niter):
             math.sin(3)
 
-        print(f'Thread worker {self.i} done at {time.time()-tic:.2f} sec.')
+        print(
+            "Thread worker {} done at {:.2f} sec.".format(
+                self.i, time.monotonic() - tic
+            )
+        )
 
 
 def mp_worker(i: int, Niter: int, tic: float):
@@ -72,34 +81,43 @@ def mp_worker(i: int, Niter: int, tic: float):
     for _ in range(Niter):
         math.sin(3)
 
-    print(f'Process worker {i} done at {time.time()-tic:.2f} sec.')
+    print("Process worker {} done at {:.2f} sec.".format(i, time.monotonic() - tic))
 
 
-if __name__ == '__main__':
-    P = ArgumentParser(description='Demonstrate differences between coroutines, threads and proceses.')
-    P.add_argument('method', help='c: coroutine, t: threading, p: multiprocessing')
-    P.add_argument('-Nworker', help='number of workers', type=int, default=4)
-    P.add_argument('-Niter', help='number of loop iterations (arbitrary)', type=int, default=5000000)
+if __name__ == "__main__":
+    P = ArgumentParser(
+        description="Demonstrate differences between coroutines, threads and proceses."
+    )
+    P.add_argument("method", help="c: coroutine, t: threading, p: multiprocessing")
+    P.add_argument("-Nworker", help="number of workers", type=int, default=4)
+    P.add_argument(
+        "-Niter",
+        help="number of loop iterations (arbitrary)",
+        type=int,
+        default=5000000,
+    )
     A = P.parse_args()
 
-    if A.method not in ('c', 't', 'p'):
-        raise ValueError('Method must be one of: c t p')
+    if A.method not in ("c", "t", "p"):
+        raise ValueError("Method must be one of: c t p")
 
-    tic = time.time()
+    tic = time.monotonic()
     for i in range(A.Nworker):
-        if A.method == 't':
-            p = Thread_worker(i, A.Niter)
+        if A.method == "t":
+            p = Thread_worker(i, A.Niter)  # type: ignore
             p.start()
-        elif A.method == 'p':
-            p = multiprocessing.Process(target=mp_worker, args=(i, A.Niter, tic))  # type: ignore
+        elif A.method == "p":
+            p = multiprocessing.Process(  # type: ignore
+                target=mp_worker, args=(i, A.Niter, tic)  # type: ignore
+            )
             p.start()
-            print(f'started process workert {i}, PID: {p.pid}')  # type: ignore
+            print(
+                "started process workert {}, PID: {}".format(i, p.pid)  # type: ignore
+            )  # type: ignore
 
-    if A.method == 'c':
-        if sys.version_info < (3, 7):
-            raise RuntimeError('Python >= 3.7 required for this example')
-        asyncio.run(coro(A.Nworker, A.Niter, tic))
+    if A.method == "c":
+        runner(coro, A.Nworker, A.Niter, tic)
     else:
         p.join()
 
-    print(f'{time.time()-tic:.2f} sec.')
+    print("{:.2f} sec.".format(time.monotonic() - tic))
