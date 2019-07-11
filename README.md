@@ -5,7 +5,7 @@
 # asyncio FFmpeg
 
 Examples of Python asyncio.subprocess with FFmpeg and also traditional synchronous processes.
-In general to show the latest techniques, Python &ge; 3.7 is required.
+
 
 ## FFprobe
 
