@@ -1,5 +1,4 @@
-[![Build Status](https://travis-ci.com/ec500-software-engineering/asyncio-subprocess-ffmpeg.svg?branch=master)](https://travis-ci.com/ec500-software-engineering/asyncio-subprocess-ffmpeg)
-[![Build status](https://ci.appveyor.com/api/projects/status/lg480ord3kxsner2?svg=true)](https://ci.appveyor.com/project/scivision/asyncio-subprocess-ffmpeg)
+[![Actions Status](https://github.com/scivision/asyncio-subprocess-ffmpeg/workflows/ci/badge.svg)](https://github.com/scivision/asyncio-subprocess-ffmpeg/actions)
 
 
 # asyncio FFmpeg
@@ -47,10 +46,10 @@ Use Python `asyncio` coroutine event loop to spawn processes.
 * `play_coarray.f90`: example of using Fortran with processes and coarrays.
 
 Build by
+
 ```sh
-cd build
-meson ..
-ninja
+meson build
+meson test -C build
 ```
 
 run like
