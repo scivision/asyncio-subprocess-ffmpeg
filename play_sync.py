@@ -32,7 +32,7 @@ if __name__ == "__main__":
         qin.put(fn)
 
     threads = []
-    for i in range(NTHREADS):
+    for _ in range(NTHREADS):
         t = threading.Thread(target=play.ffplay_sync, args=(qin,))
         t.start()
         threads.append(t)
