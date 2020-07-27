@@ -4,6 +4,14 @@
 
 Examples of Python asyncio.subprocess with FFmpeg and also traditional synchronous processes.
 
+## Coroutine vs Threads vs processes
+
+For computationally bound programs, multiple processes is often a good choice. Try:
+
+```sh
+python demo.py -h
+```
+
 ## FFprobe
 
 Both synchronous (traditional for loop) and asynchronous pipeline are demonstrated.
@@ -25,7 +33,6 @@ However, the rationale employed is that the FFprobe task is overall lightweight,
 If the FFprobe task was in an asyncio.gather() algorithm, resource utilization could get too high.
 Thus we have a "win-win" by using asyncio generator for FFprobe--the throttling comes implicitly from other parts of the pipeline.
 
-
 ### Threading
 
 Even though coroutines are more efficient in many applications, the syntax of `concurrent.futures.ThreadPoolExecutor` is perhaps the simplest possible way to spawn independent processes in a controlled fashion.
@@ -45,7 +52,7 @@ Build by
 
 ```sh
 meson build
-meson test -C build
+meson compile -C build
 ```
 
 run like

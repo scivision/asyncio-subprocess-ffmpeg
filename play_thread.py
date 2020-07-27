@@ -1,4 +1,9 @@
 #!/usr/bin/env python3
+"""
+ProcessPoolExecutor would work similarly,
+but is not needed here since all computation is done in the external program.
+"""
+
 from pathlib import Path
 import subprocess
 from argparse import ArgumentParser
