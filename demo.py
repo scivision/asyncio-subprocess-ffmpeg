@@ -74,7 +74,9 @@ if __name__ == "__main__":
     P = ArgumentParser(
         description="Demonstrate differences between coroutines, threads and proceses."
     )
-    P.add_argument("method", choices=["c", "t", "p"], help="c: coroutine, t: threading, p: multiprocessing")
+    P.add_argument(
+        "method", choices=["c", "t", "p"], help="c: coroutine, t: threading, p: multiprocessing"
+    )
     P.add_argument("-Nworker", help="number of workers", type=int, default=4)
     P.add_argument(
         "-Niter", help="number of loop iterations (arbitrary)", type=int, default=5000000,
@@ -90,9 +92,7 @@ if __name__ == "__main__":
             t.start()
             ts.append(t)
         elif A.method == "p":
-            p = multiprocessing.Process(
-                target=mp_worker, args=(i, A.Niter, tic)
-            )
+            p = multiprocessing.Process(target=mp_worker, args=(i, A.Niter, tic))
             p.start()
             ps.append(p)
 

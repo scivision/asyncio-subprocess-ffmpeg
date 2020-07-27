@@ -1,9 +1,9 @@
-#!/usr/bin/env python
-from pathlib import Path
+#!/usr/bin/env python3
 from argparse import ArgumentParser
 
 import asyncioffmpeg.ffplay as play
 from asyncioffmpeg.runner import runner
+from asyncioffmpeg import get_videos
 
 
 if __name__ == "__main__":
@@ -17,10 +17,7 @@ if __name__ == "__main__":
     )
     P = p.parse_args()
 
-    path = Path(P.path).expanduser()
-    if not path.is_dir():
-        raise NotADirectoryError(path)
-
-    flist = (f for f in path.iterdir() if f.is_file() and f.suffix in P.suffix)
+    flist = get_videos(P.path, P.suffix)
+    print("found", len(flist), "files in", P.path)
 
     runner(play.main, flist)
