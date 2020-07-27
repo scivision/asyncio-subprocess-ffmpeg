@@ -3,6 +3,11 @@
 [![Actions Status](https://github.com/scivision/asyncio-subprocess-ffmpeg/workflows/ci/badge.svg)](https://github.com/scivision/asyncio-subprocess-ffmpeg/actions)
 
 Examples of Python asyncio.subprocess with FFmpeg and also traditional synchronous processes.
+We use `src/` Python layout to demonstrate general good packaging practice, so to use the scripts:
+
+```sh
+pip install -e .
+```
 
 ## Coroutine vs Threads vs processes
 
