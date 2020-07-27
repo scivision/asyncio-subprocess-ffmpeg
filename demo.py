@@ -4,18 +4,11 @@ simple example of coroutine vs. threading vs. processes
 
 timing on old Windows laptop:
 
-    python demo.py c
+python demo.py c  => 2.3 sec.
 
-    8.6 sec.
+python demo.py t  => 2.5 sec.
 
-    python demo.py t
-
-    9.2 sec.
-
-    python demo.py p
-
-    4.5 sec.   # multiple CPU cores used simultaneously
-
+python demo.py p  => 0.9 sec.
 
 We didn't break out worker setup time from computation time.
 In real-world situations, coroutines can be faster and less resource-consuming than threads.
@@ -81,33 +74,35 @@ if __name__ == "__main__":
     P = ArgumentParser(
         description="Demonstrate differences between coroutines, threads and proceses."
     )
-    P.add_argument("method", help="c: coroutine, t: threading, p: multiprocessing")
+    P.add_argument("method", choices=["c", "t", "p"], help="c: coroutine, t: threading, p: multiprocessing")
     P.add_argument("-Nworker", help="number of workers", type=int, default=4)
     P.add_argument(
         "-Niter", help="number of loop iterations (arbitrary)", type=int, default=5000000,
     )
     A = P.parse_args()
 
-    if A.method not in ("c", "t", "p"):
-        raise ValueError("Method must be one of: c t p")
-
+    ps = []
+    ts = []
     tic = time.monotonic()
     for i in range(A.Nworker):
         if A.method == "t":
-            p = Thread_worker(i, A.Niter)  # type: ignore
-            p.start()
+            t = Thread_worker(i, A.Niter)
+            t.start()
+            ts.append(t)
         elif A.method == "p":
-            p = multiprocessing.Process(  # type: ignore
-                target=mp_worker, args=(i, A.Niter, tic)  # type: ignore
+            p = multiprocessing.Process(
+                target=mp_worker, args=(i, A.Niter, tic)
             )
             p.start()
-            print(
-                "started process workert {}, PID: {}".format(i, p.pid)  # type: ignore
-            )  # type: ignore
+            ps.append(p)
 
     if A.method == "c":
         runner(coro, A.Nworker, A.Niter, tic)
-    else:
-        p.join()
+    elif A.method == "p":
+        for p in ps:
+            p.join()
+    elif A.method == "t":
+        for t in ts:
+            t.join()
 
-    print("{:.2f} sec.".format(time.monotonic() - tic))
+    print(f"Elapsed wallclock time: {time.monotonic() - tic:.2f} sec.")
