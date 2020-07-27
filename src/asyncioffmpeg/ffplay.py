@@ -3,8 +3,6 @@ This example uses a finite number of workers, rather than slamming the system wi
 This is more effective than endless context switching for an overloaded CPU.
 """
 
-import queue
-import subprocess
 import asyncio
 from pathlib import Path
 import shutil
@@ -62,21 +60,3 @@ async def main(flist: Iterable[Path]):
         task.cancel()
 
     await asyncio.gather(*tasks, return_exceptions=True)
-
-
-def ffplay_sync(qin: queue.Queue):
-    """
-    Play media synchronously
-    """
-
-    while not qin.empty():
-        filein = qin.get(timeout=1.0)
-
-        cmd = [FFPLAY, "-v", "warning", "-autoexit", str(filein)]
-
-        ret = subprocess.run(cmd)
-
-        if ret.returncode != 0:
-            print(filein, "playback failure", cmd, file=sys.stderr)
-
-        qin.task_done()

@@ -31,13 +31,16 @@ If the FFprobe task was in an asyncio.gather() algorithm, resource utilization c
 Thus we have a "win-win" by using asyncio generator for FFprobe--the throttling comes implicitly from other parts of the pipeline.
 
 
-### play_threadpool.py
+### Threading
 
-Even though coroutines are more efficient in many applications, the syntax of `concurrent.futures.ThreadPoolExecutor` is perhaps the simplest possible way to spawn independent processes in a controlled fashion
+Even though coroutines are more efficient in many applications, the syntax of `concurrent.futures.ThreadPoolExecutor` is perhaps the simplest possible way to spawn independent processes in a controlled fashion.
 
-### play_coroutine.py
+* play_thread.py: use ThreadPoolExecutor without queue
+* play_thread_queue.py: use ThreadPoolExecutor with queue
 
-Use Python `asyncio` coroutine event loop to spawn processes.
+### Coroutine
+
+* play_coroutine.py: `asyncio` coroutine event loop to spawn processes.
 
 ### Fortran
 

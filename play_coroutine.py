@@ -13,7 +13,6 @@ if __name__ == "__main__":
         "-suffix",
         help="file suffixes of desired media file types",
         nargs="+",
-        default=[".mp4", ".avi", ".ogv", ".wmv", ".flv", ".mov", ".ogg"],
     )
     P = p.parse_args()
 

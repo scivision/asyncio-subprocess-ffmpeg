@@ -13,13 +13,7 @@ if not EXE:
 
 
 def ffplay(filein: Path):
-
-    if not filein.is_file():
-        raise FileNotFoundError(filein)
-
-    cmd = [EXE, "-v", "warning", "-autoexit", str(filein)]
-
-    subprocess.check_call(cmd)
+    subprocess.check_call([EXE, "-v", "warning", "-autoexit", str(filein)])
 
 
 if __name__ == "__main__":
