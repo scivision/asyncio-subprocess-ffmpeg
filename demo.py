@@ -35,7 +35,7 @@ async def coro_worker(i: int, Niter: int, tic: float):
     for _ in range(Niter):
         math.sin(3)
 
-    print("Coroutine worker {} done at {:.2f} sec.".format(i, time.monotonic() - tic))
+    print(f"Coroutine worker {i} done at {time.monotonic() - tic:.2f} sec.")
 
 
 async def coro(Nworker: int, Niter: int, tic: float):
@@ -59,7 +59,7 @@ class Thread_worker(threading.Thread):
         for _ in range(self.Niter):
             math.sin(3)
 
-        print("Thread worker {} done at {:.2f} sec.".format(self.i, time.monotonic() - tic))
+        print(f"Thread worker {i} done at {time.monotonic() - tic:.2f} sec.")
 
 
 def mp_worker(i: int, Niter: int, tic: float):
@@ -67,7 +67,7 @@ def mp_worker(i: int, Niter: int, tic: float):
     for _ in range(Niter):
         math.sin(3)
 
-    print("Process worker {} done at {:.2f} sec.".format(i, time.monotonic() - tic))
+    print(f"Process worker {i} done at {time.monotonic() - tic:.2f} sec.")
 
 
 if __name__ == "__main__":

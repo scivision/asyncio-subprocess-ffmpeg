@@ -20,7 +20,7 @@ if not FFPROBE:
 def print_meta(meta: typing.Dict[str, typing.Any]):
     fn = Path(meta["format"]["filename"])
     dur = float(meta["streams"][0]["duration"])
-    print("{:>40}  {:>5.1f}".format(fn.name, dur))
+    print(f"{fn.name:>40}  {dur:>5.1f}")
 
 
 async def get_meta_gather(path: Path, suffix: str) -> typing.List[typing.Dict[str, typing.Any]]:
