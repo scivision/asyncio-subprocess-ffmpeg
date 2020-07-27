@@ -1,5 +1,5 @@
-#!/usr/bin/env python
-import pytest
+from pytest import approx
+
 import asyncioffmpeg.ffprobe as probe
 from asyncioffmpeg.runner import runner
 
@@ -13,7 +13,7 @@ def test_ffprobe_as_completed(genpat):
 
     metas = runner(probe.get_meta, vid.parent, [".avi", ".mp4"])
     assert len(metas) == 1
-    assert get_duration(metas[0]) == pytest.approx(5.0)
+    assert get_duration(metas[0]) == approx(5.0)
 
 
 def test_ffprobe_gather(genpat):
@@ -21,15 +21,11 @@ def test_ffprobe_gather(genpat):
 
     metas = runner(probe.get_meta_gather, vid.parent, [".avi", ".mp4"])
     assert len(metas) == 1
-    assert get_duration(metas[0]) == pytest.approx(5.0)
+    assert get_duration(metas[0]) == approx(5.0)
 
 
 def test_ffprobe_sync(genpat):
     vid = genpat
 
     meta = probe.ffprobe_sync(vid)
-    assert get_duration(meta) == pytest.approx(5.0)
-
-
-if __name__ == "__main__":
-    pytest.main(["-x", __file__])
+    assert get_duration(meta) == approx(5.0)

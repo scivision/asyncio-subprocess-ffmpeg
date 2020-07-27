@@ -1,8 +1,8 @@
-#!/usr/bin/env python
 """
 This example uses a finite number of workers, rather than slamming the system with endless subprocesses.
 This is more effective than endless context switching for an overloaded CPU.
 """
+
 import queue
 import subprocess
 import asyncio

@@ -31,7 +31,5 @@ if __name__ == "__main__":
 
     flist = (f for f in path.iterdir() if f.is_file() and f.suffix in P.suffix)
 
-    with concurrent.futures.ThreadPoolExecutor(
-        max_workers=2, thread_name_prefix="ffplay"
-    ) as pool:
+    with concurrent.futures.ThreadPoolExecutor(max_workers=2, thread_name_prefix="ffplay") as pool:
         pool.map(ffplay, flist)

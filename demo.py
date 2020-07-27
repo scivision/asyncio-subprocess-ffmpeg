@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 """
 simple example of coroutine vs. threading vs. processes
 
@@ -26,6 +26,7 @@ In computation-bound programs like this example, coroutines and threads would ge
 as multiprocessing. However, the heavier resource usage of multiprocessing is not necessarily best for IO-bound tasks
 such as waiting for network connections, where coroutines and/or threads are often a better choice.
 """
+
 import threading
 import time
 import math
@@ -46,13 +47,9 @@ async def coro_worker(i: int, Niter: int, tic: float):
 
 async def coro(Nworker: int, Niter: int, tic: float):
     if sys.version_info >= (3, 7):
-        tasks = [
-            asyncio.create_task(coro_worker(i, Niter, tic)) for i in range(Nworker)
-        ]
+        tasks = [asyncio.create_task(coro_worker(i, Niter, tic)) for i in range(Nworker)]
     else:
-        tasks = [
-            asyncio.ensure_future(coro_worker(i, Niter, tic)) for i in range(Nworker)
-        ]
+        tasks = [asyncio.ensure_future(coro_worker(i, Niter, tic)) for i in range(Nworker)]
     await asyncio.wait(tasks)
 
 
@@ -69,11 +66,7 @@ class Thread_worker(threading.Thread):
         for _ in range(self.Niter):
             math.sin(3)
 
-        print(
-            "Thread worker {} done at {:.2f} sec.".format(
-                self.i, time.monotonic() - tic
-            )
-        )
+        print("Thread worker {} done at {:.2f} sec.".format(self.i, time.monotonic() - tic))
 
 
 def mp_worker(i: int, Niter: int, tic: float):
@@ -91,10 +84,7 @@ if __name__ == "__main__":
     P.add_argument("method", help="c: coroutine, t: threading, p: multiprocessing")
     P.add_argument("-Nworker", help="number of workers", type=int, default=4)
     P.add_argument(
-        "-Niter",
-        help="number of loop iterations (arbitrary)",
-        type=int,
-        default=5000000,
+        "-Niter", help="number of loop iterations (arbitrary)", type=int, default=5000000,
     )
     A = P.parse_args()
 

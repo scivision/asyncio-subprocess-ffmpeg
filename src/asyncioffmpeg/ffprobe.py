@@ -1,8 +1,8 @@
-#!/usr/bin/env python
 """
 use Python with FFprobe to extract
 JSON metadata from any kind of media file that FFprobe can read.
 """
+
 import asyncio
 import json
 import subprocess
@@ -28,9 +28,7 @@ def print_meta(meta: typing.Dict[str, typing.Any]):
     print("{:>40}  {:>5.1f}".format(fn.name, dur))
 
 
-async def get_meta_gather(
-    path: Path, suffix: str
-) -> typing.List[typing.Dict[str, typing.Any]]:
+async def get_meta_gather(path: Path, suffix: str) -> typing.List[typing.Dict[str, typing.Any]]:
     """ for comparison with asyncio.as_completed"""
     futures = files2futures(path, suffix)
     metas = await asyncio.gather(*futures)
@@ -40,9 +38,7 @@ async def get_meta_gather(
     return metas
 
 
-async def get_meta(
-    path: Path, suffix: str
-) -> typing.List[typing.Dict[str, typing.Any]]:
+async def get_meta(path: Path, suffix: str) -> typing.List[typing.Dict[str, typing.Any]]:
     futures = files2futures(path, suffix)
     metas = []
     for file in asyncio.as_completed(futures):

@@ -1,10 +1,8 @@
-[![Actions Status](https://github.com/scivision/asyncio-subprocess-ffmpeg/workflows/ci/badge.svg)](https://github.com/scivision/asyncio-subprocess-ffmpeg/actions)
-
-
 # asyncio FFmpeg
 
-Examples of Python asyncio.subprocess with FFmpeg and also traditional synchronous processes.
+[![Actions Status](https://github.com/scivision/asyncio-subprocess-ffmpeg/workflows/ci/badge.svg)](https://github.com/scivision/asyncio-subprocess-ffmpeg/actions)
 
+Examples of Python asyncio.subprocess with FFmpeg and also traditional synchronous processes.
 
 ## FFprobe
 
@@ -21,7 +19,7 @@ retrieve file metadata in an asynchronous pipeline (asyncio generator) using Pyt
 
 ## FFplay
 
-I like to test asynchronous techniques with video playback, as it makes some effects obvious.
+Test ingasynchronous techniques with video playback makes some effects obvious.
 The FFplay asyncio example is more advanced than the FFprobe example.
 In the FFprobe example, the lazy asyncio generator produces metadata concurrently as fast as it's requested.
 There is no resource throttling in the FFprobe example, so the CPU could become overwhelmed with context switching.
