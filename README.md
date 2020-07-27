@@ -9,6 +9,8 @@ We use `src/` Python layout to demonstrate general good packaging practice, so t
 pip install -e .
 ```
 
+All examples are under the [examples/](./examples) directory.
+
 ## Coroutine vs Threads vs processes
 
 For computationally bound programs, multiple processes is often a good choice. Try:
