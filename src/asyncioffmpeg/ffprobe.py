@@ -10,16 +10,11 @@ import typing
 from pathlib import Path
 import shutil
 
+from . import get_videos
+
 FFPROBE = shutil.which("ffprobe")
 if not FFPROBE:
     raise ImportError("FFPROBE not found")
-
-
-def files2futures(path: Path, suffix: str) -> list:
-    path = Path(path).expanduser()
-    if not path.is_dir():
-        raise NotADirectoryError(path)
-    return [ffprobe(f) for f in path.iterdir() if f.is_file() and f.suffix in suffix]
 
 
 def print_meta(meta: typing.Dict[str, typing.Any]):
@@ -30,7 +25,7 @@ def print_meta(meta: typing.Dict[str, typing.Any]):
 
 async def get_meta_gather(path: Path, suffix: str) -> typing.List[typing.Dict[str, typing.Any]]:
     """ for comparison with asyncio.as_completed"""
-    futures = files2futures(path, suffix)
+    futures = [ffprobe(f) for f in get_videos(path, suffix)]
     metas = await asyncio.gather(*futures)
     for meta in metas:
         print_meta(meta)
@@ -39,7 +34,7 @@ async def get_meta_gather(path: Path, suffix: str) -> typing.List[typing.Dict[st
 
 
 async def get_meta(path: Path, suffix: str) -> typing.List[typing.Dict[str, typing.Any]]:
-    futures = files2futures(path, suffix)
+    futures = [ffprobe(f) for f in get_videos(path, suffix)]
     metas = []
     for file in asyncio.as_completed(futures):
         meta = await file
@@ -83,7 +78,7 @@ def ffprobe_sync(file: Path) -> typing.Dict[str, typing.Any]:
             "-show_format",
             str(file),
         ],
-        universal_newlines=True,
+        text=True,
     )
 
     return json.loads(meta)

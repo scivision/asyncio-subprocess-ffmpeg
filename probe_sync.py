@@ -1,30 +1,22 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 import time
-from pathlib import Path
 from argparse import ArgumentParser
+
 import asyncioffmpeg.ffprobe as probe
+from asyncioffmpeg import get_videos
 
 
 if __name__ == "__main__":
     p = ArgumentParser(description="Get media metadata synchronously with FFprobe")
     p.add_argument("path", help="directory where media files are kept")
     p.add_argument(
-        "-suffix",
-        help="file suffixes of desired media file types",
-        nargs="+",
-        default=[".mp3", ".mp4", ".avi", ".ogv", ".ogg"],
+        "-suffix", help="file suffixes of desired media file types", nargs="+",
     )
     P = p.parse_args()
 
     tic = time.monotonic()
-    path = Path(P.path).expanduser()
-    if not path.is_dir():
-        raise FileNotFoundError(f"{path} is not a directory")
-
-    flist = (f for f in path.iterdir() if f.is_file() and f.suffix in P.suffix)
-
-    for f in flist:
+    for f in get_videos(P.path, P.suffix):
         meta = probe.ffprobe_sync(f)
         probe.print_meta(meta)
 
-    print("ffprobe sync: {:.3f} seconds".format(time.monotonic() - tic))
+    print(f"ffprobe sync: {time.monotonic() - tic:.3f} seconds")
