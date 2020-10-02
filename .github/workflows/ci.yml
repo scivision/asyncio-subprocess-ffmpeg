@@ -4,8 +4,8 @@ on: [push, pull_request]
 
 jobs:
 
-  linuxx:
-    runs-on: ubuntu-latest
+  lint:
+    runs-on: windows-latest
     strategy:
       matrix:
         python-version: ['3.x']
@@ -20,9 +20,7 @@ jobs:
     - run: flake8
     - run: mypy . src
 
-    - run: |
-        sudo apt update -yq
-        sudo apt install -yq --no-install-recommends ffmpeg
+    - run: cinst -y ffmpeg
 
     - run: pytest
 
@@ -40,8 +38,8 @@ jobs:
     - run: brew install ffmpeg
     - run: pytest
 
-  windows:
-    runs-on: windows-latest
+  linux:
+    runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
     - uses: actions/setup-python@v2
@@ -50,6 +48,8 @@ jobs:
 
     - run: pip install .[tests]
 
-    - run: cinst -y ffmpeg
+    - run: |
+        sudo apt update -yq
+        sudo apt install -yq --no-install-recommends ffmpeg
 
     - run: pytest
