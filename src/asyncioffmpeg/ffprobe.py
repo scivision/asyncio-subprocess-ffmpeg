@@ -57,7 +57,7 @@ async def ffprobe(file: Path) -> typing.Dict[str, typing.Any]:
             "-show_format",
             str(file),
         ],
-        stdout=asyncio.subprocess.PIPE
+        stdout=asyncio.subprocess.PIPE,
     )
 
     stdout, _ = await proc.communicate()

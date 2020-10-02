@@ -1,5 +1,10 @@
 from pathlib import Path
 import typing as T
+import os
+import asyncio
+
+if os.name == "nt":
+    asyncio.set_event_loop_policy(asyncio.WindowsProactorEventLoopPolicy())
 
 
 def get_videos(path: Path, suffixes: T.Sequence[str] = None) -> T.List[Path]:

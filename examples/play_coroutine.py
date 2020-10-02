@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 from argparse import ArgumentParser
+import asyncio
 
 import asyncioffmpeg.ffplay as play
-from asyncioffmpeg.runner import runner
 from asyncioffmpeg import get_videos
 
 
@@ -17,4 +17,4 @@ if __name__ == "__main__":
     flist = get_videos(P.path, P.suffix)
     print("found", len(flist), "files in", P.path)
 
-    runner(play.main, flist)
+    asyncio.run(play.main(flist))

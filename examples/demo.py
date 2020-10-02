@@ -27,7 +27,6 @@ import multiprocessing
 import asyncio
 import sys
 from argparse import ArgumentParser
-from asyncioffmpeg.runner import runner
 
 
 async def coro_worker(i: int, Niter: int, tic: float):
@@ -97,7 +96,7 @@ if __name__ == "__main__":
             ps.append(p)
 
     if A.method == "c":
-        runner(coro, A.Nworker, A.Niter, tic)
+        asyncio.run(coro(A.Nworker, A.Niter, tic))
     elif A.method == "p":
         for p in ps:
             p.join()

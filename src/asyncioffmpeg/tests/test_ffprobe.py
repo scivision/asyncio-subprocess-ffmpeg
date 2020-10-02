@@ -1,7 +1,7 @@
 from pytest import approx
+import asyncio
 
 import asyncioffmpeg.ffprobe as probe
-from asyncioffmpeg.runner import runner
 
 
 def get_duration(meta: dict) -> float:
@@ -11,7 +11,7 @@ def get_duration(meta: dict) -> float:
 def test_ffprobe_as_completed(genpat):
     vid = genpat
 
-    metas = runner(probe.get_meta, vid.parent, [".avi", ".mp4"])
+    metas = asyncio.run(probe.get_meta(vid.parent, [".avi", ".mp4"]))
     assert len(metas) == 1
     assert get_duration(metas[0]) == approx(5.0)
 
@@ -19,7 +19,7 @@ def test_ffprobe_as_completed(genpat):
 def test_ffprobe_gather(genpat):
     vid = genpat
 
-    metas = runner(probe.get_meta_gather, vid.parent, [".avi", ".mp4"])
+    metas = asyncio.run(probe.get_meta_gather(vid.parent, [".avi", ".mp4"]))
     assert len(metas) == 1
     assert get_duration(metas[0]) == approx(5.0)
 
