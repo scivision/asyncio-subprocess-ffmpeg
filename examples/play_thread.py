@@ -25,7 +25,9 @@ if __name__ == "__main__":
     p = ArgumentParser(description="Asynchronous playback with ThreadPool and FFplay")
     p.add_argument("path", help="directory where media files are kept")
     p.add_argument(
-        "-suffix", help="file suffixes of desired media file types", nargs="+",
+        "-suffix",
+        help="file suffixes of desired media file types",
+        nargs="+",
     )
     P = p.parse_args()
 

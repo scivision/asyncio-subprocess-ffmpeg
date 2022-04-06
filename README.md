@@ -1,4 +1,4 @@
-# asyncio FFmpeg
+# Python asyncio FFmpeg
 
 [![Actions Status](https://github.com/scivision/asyncio-subprocess-ffmpeg/workflows/ci/badge.svg)](https://github.com/scivision/asyncio-subprocess-ffmpeg/actions)
 
@@ -50,19 +50,3 @@ Even though coroutines are more efficient in many applications, the syntax of `c
 ### Coroutine
 
 * play_coroutine.py: `asyncio` coroutine event loop to spawn processes.
-
-### Fortran
-
-* `play_coarray.f90`: example of using Fortran with processes and coarrays.
-
-Build by
-
-```sh
-meson build
-meson compile -C build
-```
-
-run like
-```sh
-cafrun -np 3 playvid ~/Videos/*
-```

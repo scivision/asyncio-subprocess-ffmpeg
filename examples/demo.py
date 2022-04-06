@@ -12,11 +12,14 @@ python demo.py p  => 0.9 sec.
 
 We didn't break out worker setup time from computation time.
 In real-world situations, coroutines can be faster and less resource-consuming than threads.
-There is no one best choice for all task types, we fit the asynchronous architecture to the task.
-There are numerous other popular implementations of threading and coroutines beyond the built-in modules used here.
+There is no one best choice for all task types,
+we fit the asynchronous architecture to the task.
+There are numerous other popular implementations of threading and coroutines
+beyond the built-in modules used here.
 
-In computation-bound programs like this example, coroutines and threads would generally not be as good a choice
-as multiprocessing. However, the heavier resource usage of multiprocessing is not necessarily best for IO-bound tasks
+In computation-bound programs like this example, coroutines and threads would
+generally not be as good a choice as multiprocessing.
+However, the heavier resource usage of multiprocessing is not necessarily best for IO-bound tasks
 such as waiting for network connections, where coroutines and/or threads are often a better choice.
 """
 
@@ -62,7 +65,7 @@ class Thread_worker(threading.Thread):
 
 
 def mp_worker(i: int, Niter: int, tic: float):
-    """ multiprocessing worker"""
+    """multiprocessing worker"""
     for _ in range(Niter):
         math.sin(3)
 
@@ -78,7 +81,10 @@ if __name__ == "__main__":
     )
     P.add_argument("-Nworker", help="number of workers", type=int, default=4)
     P.add_argument(
-        "-Niter", help="number of loop iterations (arbitrary)", type=int, default=5000000,
+        "-Niter",
+        help="number of loop iterations (arbitrary)",
+        type=int,
+        default=5000000,
     )
     A = P.parse_args()
 

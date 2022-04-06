@@ -24,7 +24,7 @@ def print_meta(meta: typing.Dict[str, typing.Any]):
 
 
 async def get_meta_gather(path: Path, suffix: str) -> typing.List[typing.Dict[str, typing.Any]]:
-    """ for comparison with asyncio.as_completed"""
+    """for comparison with asyncio.as_completed"""
     futures = [ffprobe(f) for f in get_videos(path, suffix)]
     metas = await asyncio.gather(*futures)
     for meta in metas:
@@ -45,7 +45,7 @@ async def get_meta(path: Path, suffix: str) -> typing.List[typing.Dict[str, typi
 
 
 async def ffprobe(file: Path) -> typing.Dict[str, typing.Any]:
-    """ get media metadata """
+    """get media metadata"""
     proc = await asyncio.create_subprocess_exec(
         *[
             FFPROBE,
@@ -66,7 +66,7 @@ async def ffprobe(file: Path) -> typing.Dict[str, typing.Any]:
 
 
 def ffprobe_sync(file: Path) -> typing.Dict[str, typing.Any]:
-    """ get media metadata """
+    """get media metadata"""
     meta = subprocess.check_output(
         [
             FFPROBE,
