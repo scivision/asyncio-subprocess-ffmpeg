@@ -16,7 +16,7 @@ All examples are under the [examples/](./examples) directory.
 For computationally bound programs, multiple processes is often a good choice. Try:
 
 ```sh
-python demo.py -h
+python examples/benchmark.py -h
 ```
 
 ## FFprobe
