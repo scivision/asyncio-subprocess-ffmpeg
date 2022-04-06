@@ -4,53 +4,38 @@ on: [push, pull_request]
 
 jobs:
 
-  lint:
-    runs-on: windows-latest
+  core:
+
     strategy:
       matrix:
-        python-version: ['3.x']
+        os: ['macos-latest', 'ubuntu-latest', 'windows-latest']
+        python: ['3.7', '3.x']
+
+    name: ${{ matrix.os }}-Python-${{ matrix.python }}
+
+    runs-on: ${{ matrix.os }}
+
     steps:
     - uses: actions/checkout@v2
-    - name: Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v2
+    - uses: actions/setup-python@v2
       with:
-        python-version: ${{ matrix.python-version }}
+        python-version: ${{ matrix.python }}
 
     - run: pip install .[tests,lint]
     - run: flake8
     - run: mypy
 
-    - run: cinst -y ffmpeg
+    - name: Install
+      if: runner.os == 'Windows'
+      run: cinst -y ffmpeg
 
-    - run: pytest
+    - name: Install
+      if: runner.os == 'macOS'
+      run: brew install ffmpeg
 
-
-  macos:
-    needs: lint
-    runs-on: macos-latest
-    steps:
-    - uses: actions/checkout@v2
-    - uses: actions/setup-python@v2
-      with:
-        python-version: '3.x'
-
-    - run: pip install .[tests]
-
-    - run: brew install ffmpeg
-    - run: pytest
-
-  linux:
-    needs: lint
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v2
-    - uses: actions/setup-python@v2
-      with:
-        python-version: '3.x'
-
-    - run: pip install .[tests]
-
-    - run: |
+    - name: Install
+      if: runner.os == 'Linux'
+      run: |
         sudo apt update -yq
         sudo apt install -yq --no-install-recommends ffmpeg
 
