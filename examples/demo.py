@@ -28,7 +28,6 @@ import time
 import math
 import multiprocessing
 import asyncio
-import sys
 from argparse import ArgumentParser
 
 
@@ -41,10 +40,7 @@ async def coro_worker(i: int, Niter: int, tic: float):
 
 
 async def coro(Nworker: int, Niter: int, tic: float):
-    if sys.version_info >= (3, 7):
-        tasks = [asyncio.create_task(coro_worker(i, Niter, tic)) for i in range(Nworker)]
-    else:
-        tasks = [asyncio.ensure_future(coro_worker(i, Niter, tic)) for i in range(Nworker)]
+    tasks = [asyncio.create_task(coro_worker(i, Niter, tic)) for i in range(Nworker)]
     await asyncio.wait(tasks)
 
 

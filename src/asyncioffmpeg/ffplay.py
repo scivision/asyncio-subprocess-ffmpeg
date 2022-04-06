@@ -48,10 +48,7 @@ async def main(flist: Iterable[Path]):
     for f in flist:
         await queue.put(f)
     # %% setup Tasks
-    if sys.version_info >= (3, 7):
-        tasks = [asyncio.create_task(ffplay(queue)) for i in range(Ntask)]
-    else:
-        tasks = [asyncio.ensure_future(ffplay(queue)) for i in range(Ntask)]
+    tasks = [asyncio.create_task(ffplay(queue)) for i in range(Ntask)]
 
     await queue.join()
 
