@@ -16,6 +16,5 @@ p.add_argument(
 P = p.parse_args()
 
 flist = get_videos(P.path, P.suffix)
-print("found", len(flist), "files in", P.path)
 
 asyncio.run(play.main(flist))

@@ -69,9 +69,7 @@ def mp_worker(i: int, Niter: int, tic: float):
 
 
 if __name__ == "__main__":
-    P = ArgumentParser(
-        description="Benchmark coroutines, threads and proceses."
-    )
+    P = ArgumentParser(description="Benchmark coroutines, threads and proceses.")
     P.add_argument(
         "method", choices=["c", "t", "p"], help="c: coroutine, t: threading, p: multiprocessing"
     )

@@ -35,7 +35,6 @@ if __name__ == "__main__":
     P = p.parse_args()
 
     flist = get_videos(P.path, P.suffix)
-    print("found", len(flist), "files in", P.path)
 
     qin = queue.Queue()  # type: ignore
     for fn in flist:

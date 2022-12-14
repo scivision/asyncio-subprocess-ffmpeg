@@ -5,38 +5,42 @@ on: [push, pull_request]
 jobs:
 
   core:
+    runs-on: ${{ matrix.os }}
 
     strategy:
       matrix:
-        os: ['macos-latest', 'ubuntu-latest', 'windows-latest']
-        python: ['3.7', '3.x']
+        os: [ubuntu-latest, macos-latest, windows-latest]
+        python-version: ['3.x']
+        include:
+        - os: ubuntu-latest
+          python-version: '3.8'
 
-    name: ${{ matrix.os }}-Python-${{ matrix.python }}
-
-    runs-on: ${{ matrix.os }}
+    name: ${{ matrix.os }}-Python-${{ matrix.python-version }}
 
     steps:
-    - uses: actions/checkout@v2
-    - uses: actions/setup-python@v2
+
+    - uses: actions/checkout@v3
+
+    - uses: actions/setup-python@v4
       with:
-        python-version: ${{ matrix.python }}
+        python-version: ${{ matrix.python-version }}
 
     - run: pip install .[tests,lint]
     - run: flake8
     - run: mypy
 
-    - name: Install
+    - name: Install (windows)
       if: runner.os == 'Windows'
       run: cinst -y ffmpeg
 
-    - name: Install
+    - name: Install (macos)
       if: runner.os == 'macOS'
       run: brew install ffmpeg
 
-    - name: Install
+    - name: Install (linux)
       if: runner.os == 'Linux'
       run: |
-        sudo apt update -yq
-        sudo apt install -yq --no-install-recommends ffmpeg
+        sudo apt update
+        sudo apt install --no-install-recommends ffmpeg
 
     - run: pytest

@@ -32,7 +32,6 @@ if __name__ == "__main__":
     P = p.parse_args()
 
     flist = get_videos(P.path, P.suffix)
-    print("found", len(flist), "files in", P.path)
 
     with concurrent.futures.ThreadPoolExecutor(max_workers=2, thread_name_prefix="ffplay") as pool:
         pool.map(ffplay, flist)
