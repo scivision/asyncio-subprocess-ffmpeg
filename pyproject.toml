@@ -18,7 +18,7 @@ classifiers = [
   "Topic :: System :: Networking",
   "Topic :: Utilities"
 ]
-requires-python = ">=3.8"
+requires-python = ">=3.9"
 dynamic = ["readme"]
 
 [tool.setuptools.dynamic]

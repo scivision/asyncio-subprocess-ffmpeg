@@ -16,7 +16,7 @@ p.add_argument(
 P = p.parse_args()
 
 tic = time.monotonic()
-for f in get_videos(P.path, P.suffix):
+for f in get_videos(P.path, set(P.suffix)):
     meta = probe.ffprobe_sync(f)
     probe.print_meta(meta)
 

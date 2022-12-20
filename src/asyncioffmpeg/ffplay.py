@@ -5,14 +5,11 @@ This is more effective than endless context switching for an overloaded CPU.
 
 import asyncio
 from pathlib import Path
-import shutil
 import sys
 from typing import Iterable
 import os
 
-FFPLAY = shutil.which("ffplay")
-if not FFPLAY:
-    raise ImportError("FFPLAY not found")
+from asyncioffmpeg import get_ffplay
 
 
 async def ffplay(queue: asyncio.Queue):
@@ -20,12 +17,11 @@ async def ffplay(queue: asyncio.Queue):
     Play media asynchronously.
     Each task runs endlessly until .cancel()
     """
-    assert isinstance(FFPLAY, str)
 
     while True:
         filein = await queue.get()
 
-        cmd = [FFPLAY, "-loglevel", "warning", "-autoexit", str(filein)]
+        cmd = [get_ffplay(), "-loglevel", "warning", "-autoexit", str(filein)]
 
         proc = await asyncio.create_subprocess_exec(*cmd)
 

@@ -1,13 +1,10 @@
 import subprocess
 from pathlib import Path
 import pytest
-import shutil
+
+from asyncioffmpeg import get_ffmpeg
 
 DUR = "5"
-
-EXE = shutil.which("ffmpeg")
-if not EXE:
-    raise FileNotFoundError("ffmpeg not found")
 
 
 @pytest.fixture
@@ -19,7 +16,18 @@ def genpat(tmp_path) -> Path:
     vidfn = tmp_path / "bars.avi"
 
     subprocess.check_call(
-        [EXE, "-loglevel", "warning", "-f", "lavfi", "-i", "smptebars", "-t", DUR, str(vidfn)]
+        [
+            get_ffmpeg(),
+            "-loglevel",
+            "warning",
+            "-f",
+            "lavfi",
+            "-i",
+            "smptebars",
+            "-t",
+            DUR,
+            str(vidfn),
+        ]
     )
 
     return vidfn

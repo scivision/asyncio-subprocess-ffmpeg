@@ -9,13 +9,8 @@ import json
 import subprocess
 import typing
 from pathlib import Path
-import shutil
 
-from . import get_videos
-
-FFPROBE = shutil.which("ffprobe")
-if not FFPROBE:
-    raise ImportError("FFPROBE not found")
+from . import get_videos, get_ffprobe
 
 
 def print_meta(meta: dict[str, typing.Any]):
@@ -49,7 +44,7 @@ async def ffprobe(file: Path) -> dict[str, typing.Any]:
     """get media metadata"""
     proc = await asyncio.create_subprocess_exec(
         *[
-            FFPROBE,
+            get_ffprobe(),
             "-loglevel",
             "warning",
             "-print_format",
@@ -70,7 +65,7 @@ def ffprobe_sync(file: Path) -> dict[str, typing.Any]:
     """get media metadata"""
     meta = subprocess.check_output(
         [
-            FFPROBE,
+            get_ffprobe(),
             "-v",
             "warning",
             "-print_format",

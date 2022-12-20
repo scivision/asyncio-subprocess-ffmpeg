@@ -15,6 +15,6 @@ p.add_argument(
 )
 P = p.parse_args()
 
-flist = get_videos(P.path, P.suffix)
+flist = get_videos(P.path, set(P.suffix))
 
 asyncio.run(play.main(flist))

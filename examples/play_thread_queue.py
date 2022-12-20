@@ -3,18 +3,13 @@ from argparse import ArgumentParser
 import concurrent.futures
 import queue
 from pathlib import Path
-import shutil
 import subprocess
 
-from asyncioffmpeg import get_videos
-
-EXE = shutil.which("ffplay")
-if not EXE:
-    raise FileNotFoundError("ffplay")
+from asyncioffmpeg import get_videos, get_ffplay
 
 
 def ffplay(filein: Path):
-    subprocess.check_call([EXE, "-v", "warning", "-autoexit", str(filein)])
+    subprocess.check_call([get_ffplay(), "-v", "warning", "-autoexit", str(filein)])
 
 
 def main(qin: queue.Queue):
@@ -34,7 +29,7 @@ if __name__ == "__main__":
     )
     P = p.parse_args()
 
-    flist = get_videos(P.path, P.suffix)
+    flist = get_videos(P.path, set(P.suffix))
 
     qin = queue.Queue()  # type: ignore
     for fn in flist:
