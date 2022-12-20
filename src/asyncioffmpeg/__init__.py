@@ -23,7 +23,7 @@ def get_videos(path: Path, suffixes: str | set[str] = None) -> T.Iterator[Path]:
 @functools.cache
 def get_exe(name: str) -> str:
     if not (exe := shutil.which(name)):
-        raise ImportError(f"{name} not found")
+        raise FileNotFoundError(name)
     return exe
 
 
